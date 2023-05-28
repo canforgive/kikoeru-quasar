@@ -1,7 +1,7 @@
 <template>
   <q-item clickable class="row bg-white">
       <q-item-section class="col-auto" top> 
-        <router-link :to="`/work/${metadata.id}`">
+        <router-link :to="`/work/${formatProductID(metadata.id, unll)}`">
           <q-img transition="fade" :src="coverUrl" style="height: 120px; width: 160px;" />
         </router-link>
       </q-item-section>
@@ -9,7 +9,7 @@
 
       <q-item-section class="q-gutter-y-xs column items-start" top v-on:click.self="showReviewDialog = true">
         <q-item-label lines="2" class="text-body2">
-          <router-link :to="`/work/${metadata.id}`" class="col-auto text-black">
+          <router-link :to="`/work/${formatProductID(metadata.id, unll)}`" class="col-auto text-black">
             {{metadata.title}}
           </router-link>
         </q-item-label>
@@ -49,9 +49,9 @@
         </div>
 
         <q-item-label class="q-pt-sm" v-if="mode === 'review'">
-          <q-card class="my-card col-auto" @click="showReviewDialog = true" v-show="metadata.review_text" >
+          <q-card class="my-card text-grey col-auto" @click="showReviewDialog = true" v-show="this.metadata.review_text " >
             <q-card-section class="q-pa-sm">
-              <pre class="q-ma-none">{{metadata.review_text}}</pre>
+              <pre class="q-ma-none" >{{metadata.review_text}}</pre>
             </q-card-section>
           </q-card>
         </q-item-label>
@@ -87,6 +87,7 @@
 <script>
 import WriteReview from './WriteReview'
 import NotifyMixin from '../mixins/Notification.js'
+import { formatProductID } from 'src/utils/format-id'
 
 export default {
   name: 'FavListItem',
@@ -127,6 +128,9 @@ export default {
       const token = this.$q.localStorage.getItem('jwt-token') || ''
       return this.workid ? `/api/cover/${this.workid}?type=240x240&token=${token}` : ""
     },
+    rjCode() {
+      return formatProductID(this.metadata.id, 'RJ')
+    },
   },
 
   mounted() {
@@ -142,6 +146,7 @@ export default {
   },
 
   methods: {
+    formatProductID,
     setMetadata () {
       if (this.metadata.userRating) {
         this.rating = this.metadata.userRating;

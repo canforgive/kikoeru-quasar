@@ -135,6 +135,18 @@ const mutations = {
   CLEAR_SLEEP_MODE: (state) => {
     state.sleepTime = null
     state.sleepMode = false
+  },
+
+  TOGGLE_LYRIC: (state, flag) => {
+    state.lyricOk = flag
+  },
+  // 切换桌面字幕
+  TOGGLE_DESKTOPLRC: (state, flag) => {
+    if (typeof flag === 'boolean') {
+      state.desktopLrc = flag
+    } else {
+      state.desktopLrc = !state.desktopLrc
+    }
   }
 }
 

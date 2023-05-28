@@ -10,6 +10,7 @@
 import WorkDetails from 'components/WorkDetails'
 // import WorkQueue from 'components/WorkQueue'
 import WorkTree from 'components/WorkTree'
+import { formatProductID } from 'src/utils/format-id'
 import NotifyMixin from '../mixins/Notification.js'
 
 export default {
@@ -40,7 +41,11 @@ export default {
       this.requestData();
     }
   },
-
+  computed: {
+    rjCode() {
+      return formatProductID(this.metadata.id, 'RJ')
+    },
+  },
   created () {
     this.requestData()
   },

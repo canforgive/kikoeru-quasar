@@ -36,9 +36,7 @@ export default {
   name: 'LyricsBar',
 
   computed: {
-    ...mapState('AudioPlayer', [
-      'currentLyric'
-    ]),
+    ...mapState('AudioPlayer', ['currentLyric', 'desktopLrc']),
 
     draggable() {
       return document.getElementById('draggable')

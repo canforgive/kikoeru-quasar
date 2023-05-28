@@ -11,7 +11,7 @@
     >
       <div class="absolute-top-left transparent" style="padding: 0;">
         <q-chip dense square color="brown" text-color="white" class="q-ma-sm">
-          {{`RJ${rjcode}`}}
+          {{`${rjcode}`}}
         </q-chip>
       </div>
 
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { formatProductID } from 'src/utils/format-id'
+
 export default {
   name: 'CoverSFW',
 
@@ -56,7 +58,7 @@ export default {
     },
 
     rjcode () {
-      return (`000000${this.workid}`).slice(-6)
+      return formatProductID(this.workid, 'RJ')
     },
 
     imgClass () {

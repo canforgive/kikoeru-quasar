@@ -9,7 +9,7 @@
     <div v-if="!thumbnailMode">
       <!-- 标题 -->
       <div class="q-mx-sm text-h6 text-weight-regular ellipsis-2-lines">
-        <router-link :to="`/work/${metadata.id}`" class="text-white">
+        <router-link :to="`/work/${formatProductID(metadata.id, unll)}`" class="text-white">
           {{ metadata.title }}
         </router-link>
       </div>
@@ -68,7 +68,7 @@
         <!-- DLsite链接 -->
         <div class="col-auto">
           <q-icon name="launch" size="xs" />
-          <a class="text-blue" :href="`https://www.dlsite.com/home/work/=/product_id/RJ${String(metadata.id).padStart(6,'0')}.html`" rel="noreferrer noopener" target="_blank">DLsite</a>
+          <a class="text-blue" :href="`https://www.dlsite.com/home/work/=/product_id/${formatProductID(metadata.id, 'RJ')}.html`" rel="noreferrer noopener" target="_blank">DLsite</a>
         </div>
       </div>
 
@@ -112,6 +112,7 @@
 <script>
 // import WorkDetails from 'components/WorkDetails'
 import CoverSFW from 'components/CoverSFW'
+import { formatProductID } from 'src/utils/format-id'
 import NotifyMixin from '../mixins/Notification.js'
 
 export default {
@@ -149,7 +150,10 @@ export default {
       }
 
       return this.metadata.rate_count_detail.slice().sort(compare);
-    }
+    },
+    rjCode() {
+      return formatProductID(this.metadata.id, 'RJ')
+    },
   },
 
   // TODO: Refactor with Vuex?
@@ -183,6 +187,7 @@ export default {
   },
 
   methods: {
+    formatProductID,
     submitRating (payload) {
       this.$axios.put('/api/review', payload)
         .then((response) => {

@@ -21,6 +21,8 @@ export default function () {
     muted: false,
     volume: 0, // 音量 (0.0-1.0)
     currentLyric: '',
+    // 桌面字幕
+    desktopLrc: false,
     sleepTime: null,
     sleepMode: false,
     rewindSeekTime: 5,

@@ -5,7 +5,22 @@
       <q-card square v-show="currentPlayingFile.hash && !hide" class="fixed-bottom-right bg-white text-black audio-player" @mousewheel.prevent @touchmove.prevent>
         <!-- 音声封面 -->
         <div class="bg-dark row items-center albumart">
-          <q-img contain transition="fade" :src="coverUrl" :ratio="4/3" />
+          <q-img contain transition="fade" :src="coverUrl" :ratio="4/3" >
+            <!-- 桌面字幕按钮 -->
+          <q-btn 
+            
+            class="absolute-bottom-left q-ma-sm" 
+            align="between" :color="desktopLrc ? 'green' : 'white'" 
+            size="12px" 
+            text-color="dark" 
+            label="桌面字幕" 
+            icon="subtitles" 
+            padding="2px" 
+            rounded 
+            dense 
+            @click="toggleDskLyc" 
+          />
+          </q-img>
           <q-btn dense round size="md" color="white" text-color="dark" icon="keyboard_arrow_down" @click="toggleHide()" class="absolute-top-left q-ma-sm" />
           <q-btn dense round size="md" color="white" text-color="dark" icon="more_vert" class="absolute-top-right q-ma-sm">
             <q-menu anchor="bottom right" self="top right">
@@ -38,6 +53,7 @@
               </q-item>
             </q-menu>
           </q-btn>
+          
           <div class="row absolute q-pl-md q-pr-md col-12 justify-between">
             <q-btn v-if="!hideSeekButton" round size="lg" color="white" text-color="dark" style="opacity: 0.8" @click="swapSeekButton ? previousTrack() : rewind(true)" :icon="swapSeekButton ? 'skip_previous': rewindIcon" />
             <q-btn v-if="!hideSeekButton" round size="lg" color="white" text-color="dark" style="opacity: 0.8" @click="swapSeekButton ? nextTrack() : forward(true)" :icon="swapSeekButton ? 'skip_next' : forwardIcon" />
@@ -144,12 +160,15 @@
         </q-list>
       </q-card>
     </q-dialog>
+    <!-- 桌面字幕 -->
+    <PipLrc />
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable'
 import AudioElement from 'components/AudioElement'
+import PipLrc from 'components/PipLrc'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
@@ -157,7 +176,8 @@ export default {
 
   components: {
     draggable,
-    AudioElement
+    AudioElement,
+    PipLrc
   },
 
   data () {
@@ -201,6 +221,10 @@ export default {
 
     swapSeekButton (option) {
       this.$q.localStorage.set('swapSeekButton', option)
+    },
+    
+    lyricOk(val) {
+      if (val && !this.desktopLrc) this.toggleDskLyc()
     }
   },
 
@@ -284,7 +308,9 @@ export default {
       'queueIndex',
       'playMode',
       'rewindSeekTime',
-      'forwardSeekTime'
+      'forwardSeekTime',
+      'desktopLrc',
+      'lyricOk'
     ]),
     
     ...mapGetters('AudioPlayer', [
@@ -301,7 +327,9 @@ export default {
       changePlayMode: 'CHANGE_PLAY_MODE',
       setVolume: 'SET_VOLUME',
       rewind: 'SET_REWIND_SEEK_MODE',
-      forward: 'SET_FORWARD_SEEK_MODE'
+      forward: 'SET_FORWARD_SEEK_MODE',
+      // 切换桌面字幕
+      toggleDskLyc: 'TOGGLE_DESKTOPLRC'
     }),
     ...mapMutations('AudioPlayer', [
       'SET_TRACK',

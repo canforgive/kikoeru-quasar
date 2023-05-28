@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="`/work/${metadata.id}`">
+    <router-link :to="`/work/${rjCode}`">
       <CoverSFW :workid="metadata.id" :nsfw="false" :release="metadata.release" />
     </router-link>
 
@@ -8,7 +8,7 @@
       <div class="q-px-sm q-py-none">
         <!-- 标题 -->
         <div class="text-h6 text-weight-regular">
-          <router-link :to="`/work/${metadata.id}`" class="text-white">
+          <router-link :to="`/work/${formatProductID(metadata.id, unll)}`" class="text-white">
             {{metadata.title}}
           </router-link>
         </div>
@@ -66,7 +66,7 @@
 
           <!-- DLsite链接 -->
           <div class="col-auto">
-            <q-icon name="launch" size="xs" /><a class="text-blue" :href="`https://www.dlsite.com/home/work/=/product_id/RJ${String(metadata.id).padStart(6,'0')}.html`" rel="noreferrer noopener" target="_blank">DLsite</a>
+            <q-icon name="launch" size="xs" /><a class="text-blue" :href="`https://www.dlsite.com/home/work/=/product_id/${formatProductID(metadata.id, 'RJ')}.html`" rel="noreferrer noopener" target="_blank">DLsite</a>
           </div>
         </div>
       </div>
@@ -163,6 +163,7 @@
 <script>
 import CoverSFW from 'components/CoverSFW'
 import WriteReview from './WriteReview'
+import { formatProductID } from 'src/utils/format-id'
 import NotifyMixin from '../mixins/Notification.js'
 
 export default {
@@ -198,7 +199,10 @@ export default {
         return (a.review_point > b.review_point) ? -1 : 1;
       }
       return this.metadata.rate_count_detail.slice().sort(compare);
-    }
+    },
+    rjCode() {
+      return formatProductID(this.metadata.id, 'RJ')
+    },
   },
 
   watch: {
@@ -221,6 +225,7 @@ export default {
   },
 
   methods: {
+    formatProductID,
     setProgress (newProgress) {
       this.progress = newProgress;
       const submitPayload = {

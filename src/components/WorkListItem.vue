@@ -1,14 +1,14 @@
 <template>
-  <q-item clickable :to="`/work/${metadata.id}`" class="bg-dark text-white" style="padding: 5px;">
+  <q-item clickable :to="`/work/${rjCode}`" class="bg-dark text-white" style="padding: 5px;">
     <q-item-section avatar style="padding: 0px 5px 0px 0px;">
-      <router-link :to="`/work/${metadata.id}`">
+      <router-link :to="`/work/${rjCode}`">
         <q-img transition="fade" :src="samCoverUrl" style="height: 60px; width: 60px;" />
       </router-link>
     </q-item-section>
 
     <q-item-section>
       <q-item-label lines="2" class="text">
-        <router-link :to="`/work/${metadata.id}`" class="text-white">
+        <router-link :to="`/work/${rjCode}`" class="text-white">
           {{ metadata.title }}
         </router-link>
       </q-item-label>
@@ -51,6 +51,7 @@
 <script>
 // import WorkDetails from 'components/WorkDetails'
 // import CoverSFW from 'components/CoverSFW'
+import { formatProductID } from 'src/utils/format-id'
 
 export default {
   name: 'WorkListItem',
@@ -71,6 +72,9 @@ export default {
       // 从 LocalStorage 中读取 token
       const token = this.$q.localStorage.getItem('jwt-token') || ''
       return this.metadata.id ? `/api/cover/${this.metadata.id}?type=sam&token=${token}` : ""
+    },
+    rjCode() {
+      return formatProductID(this.metadata.id, 'RJ')
     },
   }
 }

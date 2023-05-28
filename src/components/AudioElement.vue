@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       lrcObj: null,
-      lrcAvailable: false,
+      // lrcAvailable: false,
     }
   },
 
@@ -49,6 +49,15 @@ export default {
         return `/api/media/stream/${this.currentPlayingFile.hash}?token=${token}`
       } else {
         return ""
+      }
+    },
+    
+    lrcAvailable: {
+      get() {
+        return this.$store.state.AudioPlayer.lyricOk
+      },
+      set(flag) {
+        this.$store.commit('AudioPlayer/TOGGLE_LYRIC', flag)
       }
     },
 
